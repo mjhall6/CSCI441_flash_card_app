@@ -50,10 +50,20 @@
       const user = localStorage.getItem("user");
       if (user) {
         userInfo.innerHTML = `<p>SignIn As:  ${user}</p>`;
+
+      setTimeout(() => {
+      userInfo.innerHTML = `<p>Signed in as: ${user}</p>`;
+      }, 5000); // 5 seconds
       } else {
+      userInfo.innerHTML =
+      '<a href="login.html"><button class="btn-2">Sign In</button></a>';
+      }
+      
+      /*} else {
         userInfo.innerHTML =
           '<a href="login.html"><button class="btn-2">Sign In</button></a>';
       }
+      */
       document
         .getElementById("logout")
         .addEventListener("click", function (event) {
