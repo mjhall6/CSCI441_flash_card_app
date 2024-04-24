@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcard</title>
+    <link
+      href="styles.css"
+      rel="stylesheet"
+      type="text/css"
+      media="screen, projection"
+    />
+
+    <!-- Fontawesome -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <header class="header-div">
+      <li class="fas fa-search"></li>
+      &nbsp; &nbsp;
+      <input type="text" placeholder="Search" />
+      <nav class="nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="flashcard.html">Flashcards</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="signup.html">SignUp</a></li>
+          <li><a href="Contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <li class="fas fa-bars"></li>
+    </header>
+    <main class="main">
+      <section class="login">
+        <div class="container">
+          <h2>Login</h2>
+          <div class="login-wrapper">
+            <div class="login-form">
+              <h3>Enter Account Details Below:</h3>
+              <form id="login-form">
+                <div class="form-group">
+                  <div class="form-group">
+                    <input type="email" name="email" placeholder="User Email">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" name="password" placeholder="Password">
+                  </div>
+                  <div>
+                    <a href="ForgotPassword.html">
+                      <button type="btn" class="forgot-btn">Forgot Password? Click Here</button>
+                    </a>
+                  </div>
+                  <a href="Home.html">
+                    <button type="submit" class="login-btn">Login</button>
+                  </a>
+                </form>
+				        <p class="login-link"> Don't have an account? <a href="signup.html" style="color:dodgerblue">Sign up Here</a></p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script>
+   document.getElementById('login-form').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent the form from submitting normally
+
+  const email = document.querySelector('input[name="email"]').value;
+  const password = document.querySelector('input[name="password"]').value;
+// validation 
+  if (!email || !password) {
+    alert('Please enter your email and password');
+    return;
+  }
+
+
+
+  const baseUrl = 'http://localhost:5000/api';
+    fetch( `${baseUrl}/users/signIn` , {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password
+    })
+  })
+  .then(response => {
+  if (!response.ok) {
+    return response.json().then(data => Promise.reject(data));
+  }
+  return response.json();
+})
+.then(data => {
+  // make user login in local storage 
+  localStorage.setItem('user', JSON.stringify(data.email));
+
+  // Redirect to confirmation page
+  window.location.href = 'index.html';
+})
+.catch(error => {
+  // Show error message
+  alert(error.msg);
+});
+});
+    </script>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcard</title>
+    <link
+      href="styles.css"
+      rel="stylesheet"
+      type="text/css"
+      media="screen, projection"
+    />
+
+    <!-- Fontawesome -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <header class="header-div">
+      <li class="fas fa-search"></li>
+      &nbsp; &nbsp;
+      <input type="text" placeholder="Search" />
+      <nav class="nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="flashcard.html">Flashcards</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="signup.html">SignUp</a></li>
+          <li><a href="#" id="logout">LogOut</a></li>
+          <li><a href="Contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <li class="fas fa-bars"></li>
+    </header>
+    <main class="main">
+      <h1>Welcome!</h1>
+      <div class="main-log">
+        <img src="flashcard_logo.png" alt="logo" />
+      </div>
+
+      <div id="user-info"></div>
+    </main>
+    <script>
+      const userInfo = document.getElementById("user-info");
+
+      const user = localStorage.getItem("user");
+      if (user) {
+        userInfo.innerHTML = `<p>SignIn As:  ${user}</p>`;
+      } else {
+        userInfo.innerHTML =
+          '<a href="login.html"><button class="btn-2">Sign In</button></a>';
+      }
+      document
+        .getElementById("logout")
+        .addEventListener("click", function (event) {
+          event.preventDefault(); // Prevent the link from navigating
+
+          // Clear data from localStorage
+          localStorage.clear();
+
+          // Redirect to login page
+          window.location.href = "index.html";
+        });
+      const logoutLink = document.getElementById("logout");
+
+      if (!user) {
+        // If the user is not logged in, hide the logout link
+        logoutLink.style.display = "none";
+      }
+    </script>
+  </body>
+</html>

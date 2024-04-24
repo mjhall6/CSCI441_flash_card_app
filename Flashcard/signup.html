@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcard</title>
+    <link
+      href="styles.css"
+      rel="stylesheet"
+      type="text/css"
+      media="screen, projection"
+    />
+    
+    <!-- Fontawesome -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <header class="header-div">
+      <li class="fas fa-search"></li>
+      &nbsp; &nbsp;
+      <input type="text" placeholder="Search" />
+      <nav class="nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="flashcard.html">Flashcards</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="signup.html">SignUp</a></li>
+          <li><a href="Contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <li class="fas fa-bars"></li>
+    </header>
+    <main class="signup-body">
+	<!-- &nbsp;
+	&nbsp; -->
+           
+<!-- <section class="signup">
+<div class="container-signup">
+  <h1>Sign Up</h1>
+    <div class ="signup-wrapper">
+      <div class = "signup-form">
+
+		    &nbsp;
+		    &nbsp;
+
+        <h3 class="signup-heading">Enter User Information For Account Creation Below:</h3>
+          <form>
+
+            <div class="container-signup">
+              <div>
+                <label for="email"><b>Email</b></label>
+	              <br/>
+	              <br/>
+	              <input type="text" placeholder="Enter Email" name="email" required>
+              </div>
+              <br/>
+
+              <div>
+                <label for="psw"><b>Password</b></label>
+	              <br/>
+	              <br/>
+	              <input type="password" placeholder="Enter Password" name="psw" required>
+              </div>
+              <br/>
+
+              <div>
+                <label for="psw-repeat"><b>Repeat Password</b></label>
+	              <br/>
+	              <br/>
+                <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+              </div>
+              <br/>
+
+
+              <div>
+                <label> 
+                  <input class="rememberme" type="checkbox">  
+                  Remember Me 
+                </label> 
+              </div>
+
+&nbsp;
+&nbsp;
+
+              <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+
+              <div class="button-container">
+              <button type="button" class="cancelbtn"><a class="cancel" href="index.html"> Cancel </button> </a>
+	            <a href="confirmation.html">
+              <button type="submit" class="signupbtn">Sign Up</button>
+	            </a>
+              </div>
+
+          </div>
+        </form>
+
+        <p class="login-link"> Already have an account? <a href="login.html" style="color:dodgerblue">Login here</a></p>
+        </div>
+
+      </div>
+    </div>        
+    </section>   -->
+    <section class="signup">
+      <div class="container-signup">
+        <h2>Sign Up</h2>
+        <form  id="signup-form">
+          <h4 class="signup-heading">Enter User Information For Account Creation Below</h4>
+          <label for="email">Email</label>
+          <input type="text" id="email" placeholder="Enter Email" name="email" required>
+          <label for="psw">Password</label>
+          <input type="password" id="psw" placeholder="Enter Password" name="psw" required>
+          <label for="psw-repeat">Repeat Password</label>
+          <input type="password" id="psw-repeat" placeholder="Repeat Password" name="psw-repeat" required>
+          <label>
+            <input class="rememberme" type="checkbox"> Remember Me
+          </label>
+          <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+          <div class="button-container">
+            <a class="cancel" href="index.html"><button type="button" class="cancelbtn">Cancel</button></a>
+            <a href="confirmation.html"><button type="submit" class="signupbtn">Sign Up</button></a>
+          </div>
+        </form>
+        <p class="login-link">Already have an account? <a href="login.html" style="color:dodgerblue">Login here</a></p>
+      </div>
+    </section>
+	</div>
+</main>
+  
+<script>
+  document.getElementById("signup-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+  
+    // Get form values
+    var email = document.querySelector('input[name="email"]').value;
+    var password = document.querySelector('input[name="psw"]').value;
+    var repeatPassword = document.querySelector('input[name="psw-repeat"]').value;
+  
+    // Perform form validation
+    if (email === "" || password === "" || repeatPassword === "") {
+      alert("Please fill out all fields.");
+      return;
+    }
+  
+    if (password !== repeatPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+  
+    // Form is valid, proceed with API call
+    const baseUrl = 'http://localhost:5000/api';
+    fetch( `${baseUrl}/users/signUp` , {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    })
+    .then(response => {
+  if (!response.ok) {
+    return response.json().then(data => Promise.reject(data));
+  }
+  return response.json();
+})
+.then(data => {
+  // make user login in local storage 
+  localStorage.setItem('user', JSON.stringify(data.email));
+
+  // Redirect to confirmation page
+  window.location.href = 'index.html';
+})
+.catch(error => {
+  // Show error message
+  alert(error.msg);
+});
+  
+    // Reset form
+    document.getElementById("signup-form").reset();
+  });
+</script>
+</body>
+</html>
