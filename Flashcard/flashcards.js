@@ -60,14 +60,19 @@ fetch(`${baseUrl}/flashcards`)
   })
   .catch(error => console.log(error));
 
+  function getCurrentFlashcards() {
+    return currentCategory === "all" ? getAllFlashcards() : flashcards[currentCategory];
+  }
 
-// }); 
+
+
 
 let currentFlashcardIndex = 0;
 let currentCategory = "all";
 
 // Function to load the current flashcard
 function loadFlashcard() {
+
   const currentFlashcards = currentCategory === "all" ? getAllFlashcards() : flashcards[currentCategory];
   const currentFlashcard = currentFlashcards[currentFlashcardIndex];
   document.getElementById("question").textContent = currentFlashcard.question;
@@ -90,9 +95,16 @@ function loadFlashcards() {
   currentFlashcardIndex = 0;
   loadFlashcard();
   updateFlashcardTopic('');
+
+  const currentFlashcards = getCurrentFlashcards();
+  const maxCards = currentFlashcards.length; //max length of set
+
+
+  document.getElementById("flashcardCounter").textContent = `1 / ${maxCards}`; // init values
+  document.getElementById("progressBar").style.width = '0%';
 }
 
-// //function to update flashcard topic
+
 
 function updateFlashcardTopic(searchInput) {
   if (searchInput) {
@@ -104,6 +116,37 @@ function updateFlashcardTopic(searchInput) {
   document.querySelector(".h2").textContent = selectedCategoryOption.textContent;
 }
 
+
+// //Event Listener to allow flipping flash cards by clicking
+
+document.addEventListener("DOMContentLoaded", function () {
+const flashcard = document.querySelector(".flashcard");
+flashcard.addEventListener("click", () => {
+  flashcard.classList.toggle("flipCard");
+});
+});
+
+// // Function to get all flashcards if "All" category is selected
+function getAllFlashcards() {
+return Object.values(flashcards).flat();
+}
+
+// // Function to show the previous flashcard
+function prevFlashcard() {
+const currentFlashcards = currentCategory === "all" ? getAllFlashcards() : flashcards[currentCategory];
+currentFlashcardIndex = (currentFlashcardIndex - 1 + currentFlashcards.length) % currentFlashcards.length;
+loadFlashcard();
+}
+
+// // Function to show the next flashcard
+function nextFlashcard() {
+const currentFlashcards = currentCategory === "all" ? getAllFlashcards() : flashcards[currentCategory];
+currentFlashcardIndex = (currentFlashcardIndex + 1) % currentFlashcards.length;
+loadFlashcard();
+}
+
+
+//progress
 function loadFlashcard() {
   const currentFlashcards = currentCategory === "all" ? getAllFlashcards() : flashcards[currentCategory];
   if (currentFlashcards.length === 0) {
@@ -117,33 +160,10 @@ function loadFlashcard() {
   }
   document.getElementById("question").textContent = currentFlashcard.question;
   document.getElementById("answer").textContent = currentFlashcard.answer;
+
+  document.getElementById("flashcardCounter").textContent = `${currentFlashcardIndex + 1} / ${currentFlashcards.length}`;
+
+  const progressPercent = ((currentFlashcardIndex + 1) / currentFlashcards.length) * 100;
+  document.getElementById("progressBar").style.width = `${progressPercent}%`;
 }
-// //Event Listener to allow flipping flash cards by clicking
-
-document.addEventListener("DOMContentLoaded", function () {
-  const flashcard = document.querySelector(".flashcard");
-  flashcard.addEventListener("click", () => {
-    flashcard.classList.toggle("flipCard");
-  });
-});
-
-// // Function to get all flashcards if "All" category is selected
-function getAllFlashcards() {
-  return Object.values(flashcards).flat();
-}
-
-// // Function to show the previous flashcard
-function prevFlashcard() {
-  const currentFlashcards = currentCategory === "all" ? getAllFlashcards() : flashcards[currentCategory];
-  currentFlashcardIndex = (currentFlashcardIndex - 1 + currentFlashcards.length) % currentFlashcards.length;
-  loadFlashcard();
-}
-
-// // Function to show the next flashcard
-function nextFlashcard() {
-  const currentFlashcards = currentCategory === "all" ? getAllFlashcards() : flashcards[currentCategory];
-  currentFlashcardIndex = (currentFlashcardIndex + 1) % currentFlashcards.length;
-  loadFlashcard();
-}
-
 
