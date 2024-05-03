@@ -32,15 +32,33 @@ const FlashCard = require("../models/Flashcard");
 // };
 module.exports = {
   //get all flashcards
+  // getFlashcards: async (req, res) => {
+  //   try {
+  //     const flashcards = await FlashCard.find();
+  //     return res.json(flashcards);
+  //   } catch (error) {
+  //     console.log("Error: getFlashcards", error.message);
+  //     return res.status(500).json({ msg: error.message });
+  //   }
+  // },
+
   getFlashcards: async (req, res) => {
     try {
-      const flashcards = await FlashCard.find();
+      let query = {};
+      if (req.query.search) {
+        const regex = new RegExp(req.query.search, 'i'); // 'i' makes it case insensitive
+        query = { $or: [{ "flashcards.definition": regex }, { "flashcards.answer": regex }] };
+      }
+
+      const flashcards = await FlashCard.find(query);
       return res.json(flashcards);
     } catch (error) {
       console.log("Error: getFlashcards", error.message);
       return res.status(500).json({ msg: error.message });
     }
   },
+
+
 
   // ## CODE TO INSERT FLASHCARDS INTO DATABASE FOR ONE TIME ##
 
@@ -70,3 +88,4 @@ module.exports = {
   //     .catch((err) => console.log(err));
   // }
 };
+
