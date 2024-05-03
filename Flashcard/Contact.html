@@ -33,15 +33,19 @@
                 <div class="contact-wrapper">
                     <div class="contact-form">
                         <h3>Send us a message:</h3>
-                        <form id="contactForm">
+                        <form id="contactForm" action="https://formsubmit.co/512f01d6f91fa8f881834808bbb30807" method="POST">
+                            <!--Honeypot-->
+                            <input type="text" name="_honey" style="display: none;">
+                            <!--Diable Captcha-->
+                            <input type="hidden" name="_captcha" value="false">
                             <div class="form-group">
-                                <input type="text" name="name" placeholder="Your Name (required)" required>
+                                <input id="name" type="text" name="name" placeholder="Your Name (required)" required>
                             </div>
                             <div class="form-group">
-                                <input type="email" name="email" placeholder="Your Email (required)" required>
+                                <input id="email" type="email" name="email" placeholder="Your Email (required)" required>
                             </div>
                             <div class="form-group">
-                                <textarea name="message" placeholder="Your Message"></textarea>
+                                <textarea id="message" name="message" placeholder="Your Message"></textarea>
                             </div>
                             <button type="submit" class="send-message-btn">Send Message</button>
                         </form>
@@ -53,6 +57,12 @@
     </main>
 
     
-    <script src="contactus.js"></script>
+    <script>
+        //display conformation message
+        document.getElementById('confirmationMessage').style.display = 'block';
+    
+        //reset fields
+        document.getElementById('contactForm').reset();
+    </script>
 </body>
 </html>
