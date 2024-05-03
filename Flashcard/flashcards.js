@@ -2,6 +2,7 @@
 
 const baseUrl = "http://localhost:5000/api";
 let flashcards = {};
+
 fetch(`${baseUrl}/flashcards`)
   .then(response => response.json())
   .then(data => {
@@ -14,22 +15,53 @@ fetch(`${baseUrl}/flashcards`)
       categorySelect.appendChild(option);
     });
 
-    // Store fetched flashcards data
-    flashcards = data.reduce((acc, category) => {
-      acc[category._id] = category.flashcards.map(flashcard => {
-        return {
-          category: category._id,
-          question: flashcard.definition,
-          answer: flashcard.answer
-        };
-      });
-      return acc;
-    }, {});
+    // Function to update flashcards based on search input
+    const updateFlashcards = (searchInput) => {
+      flashcards = data.reduce((acc, category) => {
+        acc[category._id] = category.flashcards
+          .map(flashcard => {
+            return {
+              category: category._id,
+              question: flashcard.definition,
+              answer: flashcard.answer
+            };
+          })
+          .filter(flashcard => {
+            return flashcard.question.toLowerCase().includes(searchInput.toLowerCase()) ||
+              flashcard.answer.toLowerCase().includes(searchInput.toLowerCase());
+          });
 
-    console.log(flashcards);
-    loadFlashcards(); // move initial load here to ensure data is loaded
+        return acc;
+      }, {});
+
+      // Check if flashcards is empty
+      if (Object.values(flashcards).every(category => category.length === 0)) {
+        document.getElementById("question").textContent = 'No data found';
+        document.getElementById("answer").textContent = 'No data found';
+      } else {
+        // Display flashcards
+        console.log('flashcards', flashcards);
+        loadFlashcards();
+      }
+    };
+
+    // Initial load
+    updateFlashcards('');
+
+    // Listen for input event on the search input
+    const searchInput = document.querySelector('input[type="text"]');
+
+    searchInput.addEventListener('input', () => {
+
+      updateFlashcards(searchInput.value);
+      updateFlashcardTopic(searchInput.value);
+
+    });
   })
   .catch(error => console.log(error));
+
+
+// }); 
 
 let currentFlashcardIndex = 0;
 let currentCategory = "all";
@@ -57,12 +89,16 @@ function loadFlashcards() {
   currentCategory = document.getElementById("category").value;
   currentFlashcardIndex = 0;
   loadFlashcard();
-  updateFlashcardTopic();
+  updateFlashcardTopic('');
 }
 
 // //function to update flashcard topic
 
-function updateFlashcardTopic() {
+function updateFlashcardTopic(searchInput) {
+  if (searchInput) {
+    document.querySelector(".h2").innerHTML = "<span style='color: blue;'>Search Results</span>" + " for " + "<span style='color: #1A4D2E;'>" + searchInput + "</span>";
+    return;
+  }
   const categorySelect = document.getElementById("category");
   const selectedCategoryOption = categorySelect.options[categorySelect.selectedIndex];
   document.querySelector(".h2").textContent = selectedCategoryOption.textContent;
