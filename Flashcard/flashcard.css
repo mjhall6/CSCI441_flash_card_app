@@ -254,14 +254,14 @@ a:hover {
   background-color: #f1f1f1;
   color: black;
   right: 45%;
-  transform: translate(-50%);
+  transform: translate(40%);
 }
 
 .next {
   background-color: #f1f1f1;
   color: black;
   left: 15%;
-  transform: translate(-50%);
+  transform: translate(-90%);
 }
 
 .round {
